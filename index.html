@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Planner</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -124,40 +125,6 @@
         }
         .btn:active { background: #6b1414; }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
-        #pdf-content {
-            position: fixed;
-            left: -9999px;
-            top: 0;
-            width: 800px;
-            padding: 20px;
-            background: #fff;
-        }
-        #pdf-content h2 {
-            color: #8b1a1a;
-            margin-bottom: 4px;
-            font-size: 1.3rem;
-        }
-        #pdf-content .pdf-date {
-            color: #888;
-            font-size: 0.85rem;
-            margin-bottom: 16px;
-        }
-        #pdf-content table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        #pdf-content th {
-            background: #8b1a1a;
-            color: #fff;
-            padding: 8px 10px;
-            text-align: left;
-        }
-        #pdf-content td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #eee;
-        }
-        #pdf-content tr:nth-child(even) td { background: #faf7f4; }
         .no-items { color: #999; text-align: center; padding: 20px; font-style: italic; }
     </style>
 </head>
@@ -182,23 +149,7 @@
         📄 Generate PDF
     </button>
 
-    <!-- Hidden PDF template -->
-    <div id="pdf-content">
-        <h2 id="pdf-title"></h2>
-        <p class="pdf-date" id="pdf-date"></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Unit</th>
-                    <th>Note</th>
-                </tr>
-            </thead>
-            <tbody id="pdf-table-body"></tbody>
-        </table>
-    </div>
+
 
     <script>
         const DATA = {
@@ -283,59 +234,51 @@
             if (!eventKey) return;
 
             const event = DATA[eventKey];
-            const pdfTitle = document.getElementById('pdf-title');
-            const pdfDate = document.getElementById('pdf-date');
-            const pdfBody = document.getElementById('pdf-table-body');
-
-            pdfTitle.textContent = `${event.name} — Items List`;
-            pdfDate.textContent = `Generated on: ${new Date().toLocaleDateString('en-IN', {
-                day: 'numeric', month: 'long', year: 'numeric'
-            })}`;
-
-            pdfBody.innerHTML = '';
-            let count = 0;
+            const rows = [];
 
             event.objects.forEach(obj => {
                 const checkbox = document.getElementById(`chk-${obj.id}`);
                 if (!checkbox || !checkbox.checked) return;
 
-                count++;
                 const qty = obj.hasQuantity
                     ? (document.getElementById(`qty-${obj.id}`)?.value || '—')
                     : '—';
                 const note = document.getElementById(`note-${obj.id}`)?.value || '';
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${count}</td>
-                    <td>${obj.name}</td>
-                    <td>${qty}</td>
-                    <td>${obj.unit}</td>
-                    <td>${note}</td>
-                `;
-                pdfBody.appendChild(row);
+                rows.push([rows.length + 1, obj.name, qty, obj.unit, note]);
             });
 
-            if (count === 0) {
+            if (rows.length === 0) {
                 alert('Please select at least one item.');
                 return;
             }
 
-            // Generate PDF
-            const element = document.getElementById('pdf-content');
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-            const opt = {
-                margin: 10,
-                filename: `${event.name.toLowerCase()}-items-list.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            // Title
+            doc.setFontSize(18);
+            doc.setTextColor(139, 26, 26);
+            doc.text(`${event.name} \u2014 Items List`, 14, 20);
 
-            // Use requestAnimationFrame to ensure browser has painted the content
-            requestAnimationFrame(() => {
-                html2pdf().set(opt).from(element).save();
+            // Date
+            doc.setFontSize(10);
+            doc.setTextColor(136, 136, 136);
+            doc.text(`Generated on: ${new Date().toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            })}`, 14, 28);
+
+            // Table
+            doc.autoTable({
+                startY: 34,
+                head: [['#', 'Item', 'Quantity', 'Unit', 'Note']],
+                body: rows,
+                headStyles: { fillColor: [139, 26, 26] },
+                alternateRowStyles: { fillColor: [250, 247, 244] },
+                styles: { fontSize: 10 }
             });
+
+            doc.save(`${event.name.toLowerCase()}-items-list.pdf`);
         }
     </script>
 </body>
