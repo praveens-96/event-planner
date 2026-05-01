@@ -149,6 +149,18 @@
             flex-shrink: 0;
             margin-top: 2px;
         }
+        .detail-row { margin-bottom: 12px; }
+        .detail-row:last-child { margin-bottom: 0; }
+        .detail-row label { margin-bottom: 4px; }
+        .detail-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+        .detail-input:focus { border-color: #8b1a1a; outline: none; }
         .group-block { margin-bottom: 12px; }
         .group-header {
             display: flex;
@@ -200,8 +212,20 @@
             text-align: right;
             font-size: 11px;
             color: #888;
-            margin-bottom: 16px;
+            margin-bottom: 4px;
         }
+        #pdf-content .pdf-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 13px;
+            color: #444;
+            margin-top: 14px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        #pdf-content .pdf-meta span { white-space: nowrap; }
         #pdf-content table {
             width: 100%;
             border-collapse: collapse;
@@ -234,6 +258,21 @@
         </select>
     </div>
 
+    <div class="section" id="details-section" style="display:none;">
+        <div class="detail-row">
+            <label for="input-name">பெயர்</label>
+            <input type="text" id="input-name" class="detail-input" placeholder="பெயர் உள்ளிடவும்">
+        </div>
+        <div class="detail-row">
+            <label for="input-phone">கைபேசி எண்</label>
+            <input type="tel" id="input-phone" class="detail-input" placeholder="கைபேசி எண் உள்ளிடவும்">
+        </div>
+        <div class="detail-row">
+            <label for="input-date">தேதி</label>
+            <input type="date" id="input-date" class="detail-input">
+        </div>
+    </div>
+
     <div class="section" id="type-section" style="display:none;">
         <label>பொருட்கள் வகை தேர்வு செய்க</label>
         <div class="radio-group">
@@ -261,6 +300,7 @@
         <div class="pdf-date" id="pdf-date"></div>
         <div class="pdf-symbol">உ</div>
         <div class="pdf-title" id="pdf-title"></div>
+        <div id="pdf-meta"></div>
         <div id="pdf-table-body"></div>
     </div>
 
@@ -301,6 +341,7 @@
         // ═══════════════════════════════════════════════════════════════
 
         const eventSelect = document.getElementById('event-select');
+        const detailsSection = document.getElementById('details-section');
         const typeSection = document.getElementById('type-section');
         const objectsSection = document.getElementById('objects-section');
         const objectsList = document.getElementById('objects-list');
@@ -308,6 +349,7 @@
 
         eventSelect.addEventListener('change', () => {
             const hasEvent = !!eventSelect.value;
+            detailsSection.style.display = hasEvent ? 'block' : 'none';
             typeSection.style.display = hasEvent ? 'block' : 'none';
             if (!hasEvent) {
                 objectsSection.style.display = 'none';
@@ -409,9 +451,18 @@
             return rows;
         }
 
-        function buildPdfHtml(title, dateStr, groupsData) {
+        function buildPdfHtml(title, dateStr, groupsData, meta) {
             document.getElementById('pdf-title').textContent = title;
             document.getElementById('pdf-date').textContent = dateStr;
+            const pdfMeta = document.getElementById('pdf-meta');
+            pdfMeta.className = '';
+            pdfMeta.innerHTML = '';
+            if (meta.name || meta.phone || meta.date) {
+                pdfMeta.className = 'pdf-meta';
+                if (meta.name)  pdfMeta.innerHTML += `<span>பெயர்: <strong>${meta.name}</strong></span>`;
+                if (meta.phone) pdfMeta.innerHTML += `<span>கைபேசி: <strong>${meta.phone}</strong></span>`;
+                if (meta.date)  pdfMeta.innerHTML += `<span>தேதி: <strong>${meta.date}</strong></span>`;
+            }
             const pdfBody = document.getElementById('pdf-table-body');
             pdfBody.innerHTML = '';
             groupsData.forEach(group => {
@@ -476,6 +527,15 @@
             const event = DATA[eventKey];
             const type  = getSelectedType();
             const dateStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+            const meta = {
+                name:  document.getElementById('input-name').value.trim(),
+                phone: document.getElementById('input-phone').value.trim(),
+                date:  (() => { const v = document.getElementById('input-date').value; if (!v) return ''; const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; })()
+            };
+            const rawDate = document.getElementById('input-date').value || '';
+            const fileDate = rawDate.replace(/-/g, '');
+            const fileName = meta.name.replace(/\s+/g, '-') || 'unknown';
+            const makeFilename = (eventName, suffix) => `${eventName}_${fileDate}_${fileName}${suffix ? '_' + suffix : ''}.pdf`;
 
             const contractLabel    = type === 'contract' ? 'வாத்தியார் வாங்க வேண்டியவை'   : 'வாங்க வேண்டியவை';
             const nonContractLabel = type === 'contract' ? 'நடத்துனர் வாங்க வேண்டியவை' : 'கொண்டு வர வேண்டியவை';
@@ -501,21 +561,21 @@
                     // ── Two separate PDF files ──
                     if (contractRows.length > 0) {
                         buildPdfHtml(`${event.name}`, dateStr,
-                            [{ label: contractGroup.label, rows: contractRows }]);
-                        await captureAndSave(`${event.name}-contract.pdf`);
+                            [{ label: contractGroup.label, rows: contractRows }], meta);
+                        await captureAndSave(makeFilename(event.name, 'contract'));
                     }
                     if (nonContractRows.length > 0) {
                         buildPdfHtml(`${event.name}`, dateStr,
-                            [{ label: nonContractGroup.label, rows: nonContractRows }]);
-                        await captureAndSave(`${event.name}-non-contract.pdf`);
+                            [{ label: nonContractGroup.label, rows: nonContractRows }], meta);
+                        await captureAndSave(makeFilename(event.name, 'non-contract'));
                     }
                 } else {
                     // ── Single PDF with group headings ──
                     const groups = [];
                     if (contractRows.length > 0)    groups.push({ label: contractGroup.label,    rows: contractRows });
                     if (nonContractRows.length > 0) groups.push({ label: nonContractGroup.label, rows: nonContractRows });
-                    buildPdfHtml(`${event.name} — பூஜை பொருட்கள்`, dateStr, groups);
-                    await captureAndSave(`${event.name}-items-list.pdf`);
+                    buildPdfHtml(`${event.name} — பூஜை பொருட்கள்`, dateStr, groups, meta);
+                    await captureAndSave(makeFilename(event.name, ''));
                 }
             } catch (err) {
                 alert('PDF generation failed.');
