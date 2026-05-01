@@ -645,7 +645,7 @@
                 date:  (() => { const v = document.getElementById('input-date').value; if (!v) return ''; const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; })()
             };
             const rawDate = document.getElementById('input-date').value || '';
-            const fileDate = rawDate.replace(/-/g, '');
+            const fileDate = rawDate ? (() => { const [y,m,d] = rawDate.split('-'); return `${d}-${m}-${y}`; })() : '';
             const fileName = meta.name.replace(/\s+/g, '-') || 'unknown';
             const makeFilename = (eventName, suffix) => `${eventName}_${fileDate}_${fileName}${suffix ? '_' + suffix : ''}.pdf`;
 
