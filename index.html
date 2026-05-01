@@ -255,6 +255,7 @@
             <option value="">— விழா —</option>
             <option value="wedding">திருமணம்</option>
             <option value="engagement">நிச்சயதார்த்தம்</option>
+            <option value="gruhapravesam">கிருஹபிரவேசம்</option>
         </select>
     </div>
 
@@ -317,13 +318,50 @@
             wedding: {
                 name: "திருமணம்",
                 contract: [
-                    { id: "manjal",  name: "மஞ்சள்",    unit: "கி.",        hasQuantity: true,  defaultQty: "", defaultNote: "" },
-                    { id: "kumkum",  name: "குங்குமம்",  unit: "கி.",        hasQuantity: true,  defaultQty: "", defaultNote: "" },
+                    { id: "manjaltool",     name: "மஞ்சள் தூள்",                        unit: "கி.",       hasQuantity: true,  defaultQty: "100", defaultNote: "" },
+                    { id: "kumkum",         name: "குங்குமம்",                           unit: "கி.",       hasQuantity: true,  defaultQty: "50",  defaultNote: "" },
+                    { id: "santhanam",      name: "சந்தனம்",                             unit: "ரூ.",       hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "viralimanjal",   name: "விரலி மஞ்சள்",                        unit: "கி.",       hasQuantity: true,  defaultQty: "50",  defaultNote: "" },
+                    { id: "vettrilai",      name: "வெற்றிலை",                            unit: "கவுளி",     hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "pakku",          name: "களி பாக்கு / பாக்கு பொட்டலம்",      unit: "ரூ.",       hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
+                    { id: "kottaipakku",    name: "கொட்டை பாக்கு",                      unit: "எண்.",      hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "karjur",         name: "கர்ஜூற்காய்",                         unit: "எண்.",      hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "udhuvathi",      name: "ஊதுவத்தி",                            unit: "பாக்கெட்",  hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "karpuram",       name: "கற்பூரம்",                            unit: "பாக்கெட்",  hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "samithu",        name: "சமித்து",                             unit: "கட்டு",     hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "ney",            name: "நெய்",                                unit: "கி.",       hasQuantity: true,  defaultQty: "200", defaultNote: "" },
+                    { id: "poosaram",       name: "பூ சரம்",                             unit: "முழம்",     hasQuantity: true,  defaultQty: "3",   defaultNote: "" },
+                    { id: "uthiripoo",      name: "உதிரி பூ / ரோஜா",                    unit: "ரூ.",       hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
+                    { id: "coconutunpeel",  name: "தேங்காய் உரிக்காதது",                unit: "எண்.",      hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "coconutpeel",    name: "தேங்காய் உரித்தது",                  unit: "எண்.",      hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "vazhaipazham",   name: "வாழை பழம்",                           unit: "எண்.",      hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "vazhaielai",     name: "வாழை இலை",                            unit: "எண்.",      hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "kalasanool",     name: "கலச நூல் உருண்டை",                   unit: "எண்.",      hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "maavilai",       name: "மாவிலை",                              unit: "கொத்து",    hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "nelpori",        name: "நெல் பொரி",                           unit: "பாக்கெட்",  hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "vellam",         name: "வெல்லம்",                             unit: "ரூ.",       hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "seeragam",       name: "சீரகம்",                              unit: "ரூ.",       hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "paccharisi",     name: "பச்சரிசி",                            unit: "கிலோ",      hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "navadhaniyam",   name: "நவதானியம்",                           unit: "செட்",      hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "poonool",        name: "பூணூல் / மெட்டி",                     unit: "—",         hasQuantity: false, defaultQty: "",    defaultNote: "" },
                 ],
                 nonContract: [
-                    { id: "coconut", name: "தேங்காய்",   unit: "எண்ணிக்கை", hasQuantity: true,  defaultQty: "", defaultNote: "" },
-                    { id: "panneer", name: "பன்னீர்",    unit: "மில்லி.",    hasQuantity: true,  defaultQty: "", defaultNote: "" },
-                    { id: "banana",  name: "வாழைப்பழம்", unit: "எண்ணிக்கை", hasQuantity: true,  defaultQty: "", defaultNote: "" },
+                    { id: "kuthuvilakku",   name: "குத்து விளக்கு",                      unit: "எண்.",      hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
+                    { id: "ammanvilakku",   name: "காமாட்சி அம்மன் விளக்கு",            unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "siriyathattu",   name: "சிறிய தட்டு",                         unit: "எண்.",      hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
+                    { id: "periyathattu",   name: "பெரிய தட்டு",                         unit: "எண்.",      hasQuantity: true,  defaultQty: "4",  defaultNote: "" },
+                    { id: "neykinnam",      name: "நெய் கிண்ணம்",                        unit: "—",         hasQuantity: false, defaultQty: "",   defaultNote: "" },
+                    { id: "mani",           name: "மணி",                                  unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "thupakkal",      name: "தூபக்கால்",                            unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "panchapaathiram", name: "பஞ்ச பாத்திரம் / உத்தரணி",          unit: "செட்",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "kalyanpanai",    name: "கல்யாண பாணைகள்",                      unit: "—",         hasQuantity: false, defaultQty: "",   defaultNote: "" },
+                    { id: "kudavilakku",    name: "குட விளக்கு",                          unit: "—",         hasQuantity: false, defaultQty: "",   defaultNote: "" },
+                    { id: "ammi",           name: "அம்மி / குழவி",                       unit: "—",         hasQuantity: false, defaultQty: "",   defaultNote: "" },
+                    { id: "kalyanmanai",    name: "கல்யாண மணை",                          unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "aiyarmanai",     name: "ஐயர் மணை",                            unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "mukkali",        name: "முக்காலி",                             unit: "எண்.",      hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
+                    { id: "nalumuzham",     name: "நாலு முழம் வேஷ்டி (மணை மீது போட)",   unit: "எண்.",      hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "malaikal",       name: "மாலைகள் / மாத்து மாலைகள் / பூ செண்டு", unit: "—",       hasQuantity: false, defaultQty: "",   defaultNote: "" },
                 ]
             },
             engagement: {
@@ -335,6 +373,64 @@
                 ],
                 nonContract: [
                     { id: "coconut", name: "தேங்காய்",   unit: "எண்ணிக்கை", hasQuantity: true,  defaultQty: "", defaultNote: "" },
+                ]
+            },
+            gruhapravesam: {
+                name: "கிருஹபிரவேசம்",
+                contract: [
+                    { id: "manjaltool",     name: "மஞ்சள் தூள்",                      unit: "கி.",     hasQuantity: true,  defaultQty: "100", defaultNote: "" },
+                    { id: "kumkum",        name: "குங்குமம்",                          unit: "கி.",     hasQuantity: true,  defaultQty: "50",  defaultNote: "" },
+                    { id: "santhanam",     name: "சந்தனம்",                            unit: "ரூ.",     hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "viralimanjal",  name: "விரலி மஞ்சள்",                      unit: "கி.",     hasQuantity: true,  defaultQty: "50",  defaultNote: "" },
+                    { id: "vettrilai",     name: "வெற்றிலை",                          unit: "கவுளி",   hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "pakku",         name: "களி பாக்கு / பாக்கு பொட்டலம்",    unit: "ரூ.",     hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
+                    { id: "kottaipakku",   name: "கொட்டை பாக்கு",                    unit: "எண்.",    hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "paccharisi",    name: "பச்சரிசி",                          unit: "கிலோ",   hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "karjur",        name: "கர்ஜூற்காய்",                       unit: "எண்.",    hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "udhuvathi",     name: "ஊதுவத்தி",                          unit: "பாக்கெட்", hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "karpuram",      name: "கற்பூரம்",                          unit: "பாக்கெட்", hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "samithu",       name: "சமித்து",                           unit: "கட்டு",  hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "ney",           name: "நெய்",                              unit: "கி.",     hasQuantity: true,  defaultQty: "500", defaultNote: "" },
+                    { id: "poosaram",      name: "பூ சரம்",                           unit: "முழம்",  hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "uthiripoo",     name: "உதிரி பூ / ரோஜா",                  unit: "ரூ.",     hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
+                    { id: "kazhuththumalai", name: "கழுத்து மாலை",                   unit: "எண்.",    hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "nilaimalai",    name: "நிலை மாலை",                         unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "pasumalai",     name: "பசுவிற்க்கு மாலை",                 unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "pasuveshti",    name: "பசுவிற்க்கு வேஷ்டி, டவல்",        unit: "செட்",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "aiyarveshti",   name: "ஐயர் வேஷ்டி",                      unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "9 x 5" },
+                    { id: "coconutunpeel", name: "தேங்காய் உரிக்காதது",              unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "coconutpeel",   name: "தேங்காய் உரித்தது",                unit: "எண்.",    hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
+                    { id: "vazhaipazham",  name: "வாழை பழம்",                         unit: "டஜன்",   hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "vazhaielai",    name: "வாழை இலை",                          unit: "எண்.",    hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "kalasanool",    name: "கலச நூல் உருண்டை",                 unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "maavilai",      name: "மாவிலை",                            unit: "கொத்து", hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "nelpori",       name: "நெல் பொரி",                         unit: "பாக்கெட்", hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "vellam",        name: "வெல்லம்",                           unit: "ரூ.",     hasQuantity: true,  defaultQty: "5",   defaultNote: "" },
+                    { id: "navadhaniyam",  name: "நவதானியம்",                         unit: "கி. (ஒவ்வொன்றும்)", hasQuantity: true, defaultQty: "100", defaultNote: "" },
+                    { id: "navagrahathuni", name: "நவகிரஹ துணி",                     unit: "செட்",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "kopparai",      name: "கொப்பரை",                           unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "pattuvasthiram", name: "சிகப்பு பட்டு வஸ்திரம்",         unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "homathiraviyam", name: "ஹோம திரவியம்",                    unit: "பாக்கெட்", hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "dharba",        name: "தர்பை",                             unit: "கட்டு",  hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
+                    { id: "thonnai",       name: "தொன்னை",                            unit: "எண்.",    hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
+                    { id: "teacups",       name: "Tea Cups",                          unit: "எண்.",    hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                ],
+                nonContract: [
+                    { id: "kuthuvilakku",  name: "குத்து விளக்கு / எண்ணெய் / திரி",          unit: "எண்.",   hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
+                    { id: "ammanvilakku",  name: "காமாட்சி அம்மன் விளக்கு / தீப் பெட்டி",    unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "siriyathattu",  name: "சிறிய தட்டு",                               unit: "எண்.",   hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
+                    { id: "periyathattu",  name: "பெரிய தட்டு",                               unit: "எண்.",   hasQuantity: true,  defaultQty: "4",  defaultNote: "" },
+                    { id: "neykinnam",     name: "நெய் கிண்ணம்",                             unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "mani",          name: "மணி",                                       unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "thupakkal",     name: "தூபக்கால்",                                 unit: "செட்",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "panchapaathiram", name: "பஞ்ச பாத்திரம் / உத்தரணி",             unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "kalyanmanai",   name: "கல்யாண மணை",                               unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "aiyarmanai",    name: "ஐயர் மணை",                                 unit: "எண்.",   hasQuantity: true,  defaultQty: "15", defaultNote: "" },
+                    { id: "sengal",        name: "செங்கல்",                                   unit: "பாண்டு", hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "manal",         name: "மணல்",                                      unit: "—",      hasQuantity: false, defaultQty: "",   defaultNote: "" },
+                    { id: "kolamavu",      name: "கோல மாவு",                                  unit: "எண்.",   hasQuantity: true,  defaultQty: "4",  defaultNote: "" },
+                    { id: "pazhayaseithi", name: "பழய செய்தி தாள்",                          unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
+                    { id: "kalasasombu",   name: "கலச சொம்பு",                               unit: "எண்.",   hasQuantity: true,  defaultQty: "1",  defaultNote: "" },
                 ]
             }
         };
@@ -400,7 +496,7 @@
                     card.innerHTML = `
                         <div class="object-header">
                             <input type="checkbox" id="chk-${uid}" data-id="${uid}" checked onchange="toggleFields(this)">
-                            <span class="object-name">${obj.name} <span class="unit-badge">${obj.unit}</span></span>
+                            <span class="object-name">${obj.name}${obj.unit && obj.unit !== 'எண்.' && obj.unit !== 'எண்ணிக்கை' ? ` <span class="unit-badge">${obj.unit}</span>` : ''}</span>
                         </div>
                         <div class="object-fields visible" id="fields-${uid}">
                             ${obj.hasQuantity ? `
@@ -444,7 +540,8 @@
                 const checkbox = document.getElementById(`chk-${uid}`);
                 if (!checkbox || !checkbox.checked) return;
                 const qty = obj.hasQuantity ? (document.getElementById(`qty-${uid}`)?.value || '—') : '—';
-                const qtyDisplay = obj.hasQuantity ? (qty !== '—' ? `${qty} ${obj.unit}` : '—') : '—';
+                const noUnitSuffix = !obj.unit || obj.unit === 'எண்.' || obj.unit === 'எண்ணிக்கை';
+                const qtyDisplay = obj.hasQuantity ? (qty !== '—' ? (noUnitSuffix ? qty : `${qty} ${obj.unit}`) : '—') : '—';
                 const note = document.getElementById(`note-${uid}`)?.value || '';
                 rows.push({ name: obj.name, qtyDisplay, note });
             });
@@ -472,7 +569,7 @@
                 heading.textContent = group.label;
                 pdfBody.appendChild(heading);
                 const table = document.createElement('table');
-                table.innerHTML = `<thead><tr><th>#</th><th>பொருள்</th><th>அளவு</th><th>குறிப்பு</th></tr></thead>`;
+                table.innerHTML = `<colgroup><col style="width:5%"><col style="width:50%"><col style="width:15%"><col style="width:30%"></colgroup><thead><tr><th>#</th><th>பொருள்</th><th>அளவு</th><th>குறிப்பு</th></tr></thead>`;
                 const tbody = document.createElement('tbody');
                 group.rows.forEach((r, i) => {
                     const row = document.createElement('tr');
@@ -486,11 +583,21 @@
 
         async function captureAndSave(filename) {
             const element = document.getElementById('pdf-content');
+            const savedScrollY = window.scrollY;
+            element.style.position = 'absolute';
             element.style.left = '0';
-            element.style.position = 'fixed';
+            element.style.top = '0';
             element.style.zIndex = '-1';
+            window.scrollTo(0, 0);
             try {
-                const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: element.scrollWidth,
+                    windowHeight: 99999
+                });
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
                 const pageWidth  = doc.internal.pageSize.getWidth();
@@ -514,8 +621,10 @@
                 }
                 doc.save(filename);
             } finally {
+                window.scrollTo(0, savedScrollY);
                 element.style.left = '-9999px';
                 element.style.position = 'absolute';
+                element.style.top = '0';
                 element.style.zIndex = '';
             }
         }
