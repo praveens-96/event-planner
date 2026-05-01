@@ -310,7 +310,9 @@
     <script>
         // ═══════════════════════════════════════════════════════════════
         // CONFIGURE ITEMS HERE
-        // Each item: { id, name, unit, hasQuantity, defaultQty, defaultNote }
+        // Each item: { id, name, unit, hasQuantity, hasNote, defaultQty, defaultNote }
+        //   hasQuantity : true  → show அளவு input field
+        //   hasNote     : true  → show குறிப்பு input field (omit or false to hide)
         // 'contract'    → வாத்தியார் பொருட்கள்
         // 'nonContract' → விழா நடத்துனர் பொருட்கள்
         // ═══════════════════════════════════════════════════════════════
@@ -369,7 +371,7 @@
                 contract: [
                     { id: "manjal",  name: "மஞ்சள்",              unit: "கி.",        hasQuantity: true,  defaultQty: "", defaultNote: "" },
                     { id: "kumkum",  name: "குங்குமம்",            unit: "கி.",        hasQuantity: true,  defaultQty: "", defaultNote: "" },
-                    { id: "vasippu", name: "வாசிப்பு பதிரிக்கை",  unit: "—",          hasQuantity: false, defaultQty: "", defaultNote: "மணமக்கள் மற்றும் மணமகளின் குடும்பத்தாரிடமிருந்து பதிரிக்கை வாசிக்க" },
+                    { id: "vasippu", name: "வாசிப்பு பதிரிக்கை",  unit: "—",          hasQuantity: false, hasNote: true, defaultQty: "", defaultNote: "மணமக்கள் மற்றும் மணமகளின் குடும்பத்தாரிடமிருந்து பதிரிக்கை வாசிக்க" },
                 ],
                 nonContract: [
                     { id: "coconut", name: "தேங்காய்",   unit: "எண்ணிக்கை", hasQuantity: true,  defaultQty: "", defaultNote: "" },
@@ -397,7 +399,7 @@
                     { id: "nilaimalai",    name: "நிலை மாலை",                         unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
                     { id: "pasumalai",     name: "பசுவிற்க்கு மாலை",                 unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
                     { id: "pasuveshti",    name: "பசுவிற்க்கு வேஷ்டி, டவல்",        unit: "செட்",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
-                    { id: "aiyarveshti",   name: "ஐயர் வேஷ்டி",                      unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "9 x 5" },
+                    { id: "aiyarveshti",   name: "ஐயர் வேஷ்டி",                      unit: "எண்.",    hasQuantity: true,  hasNote: true, defaultQty: "1",   defaultNote: "9 x 5" },
                     { id: "coconutunpeel", name: "தேங்காய் உரிக்காதது",              unit: "எண்.",    hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
                     { id: "coconutpeel",   name: "தேங்காய் உரித்தது",                unit: "எண்.",    hasQuantity: true,  defaultQty: "2",   defaultNote: "" },
                     { id: "vazhaipazham",  name: "வாழை பழம்",                         unit: "டஜன்",   hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
@@ -413,7 +415,7 @@
                     { id: "homathiraviyam", name: "ஹோம திரவியம்",                    unit: "பாக்கெட்", hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
                     { id: "dharba",        name: "தர்பை",                             unit: "கட்டு",  hasQuantity: true,  defaultQty: "1",   defaultNote: "" },
                     { id: "thonnai",       name: "தொன்னை",                            unit: "எண்.",    hasQuantity: true,  defaultQty: "20",  defaultNote: "" },
-                    { id: "teacups",       name: "Tea Cups",                          unit: "எண்.",    hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
+                    { id: "teacups",       name: "டீ கப்",                            unit: "எண்.",    hasQuantity: true,  defaultQty: "10",  defaultNote: "" },
                 ],
                 nonContract: [
                     { id: "kuthuvilakku",  name: "குத்து விளக்கு / எண்ணெய் / திரி",          unit: "எண்.",   hasQuantity: true,  defaultQty: "2",  defaultNote: "" },
@@ -502,14 +504,15 @@
                             ${obj.hasQuantity ? `
                             <div class="field-row">
                                 <label>அளவு:</label>
-                                <input type="number" class="qty-input" id="qty-${uid}" placeholder="0" min="0" step="any" value="${obj.defaultQty || ''}">
+                                <input type="number" inputmode="decimal" class="qty-input" id="qty-${uid}" placeholder="0" min="0" step="any" value="${obj.defaultQty || ''}">
                             </div>` : ''}
+                            ${obj.hasNote ? `
                             <div class="field-row note-row">
                                 <label>குறிப்பு:</label>
                                 <input type="text" class="note-input" id="note-${uid}"
                                        placeholder="குறிப்பு சேர்க்கவும்..."
                                        value="${obj.defaultNote || ''}">
-                            </div>
+                            </div>` : ''}
                         </div>
                     `;
                     container.appendChild(card);
@@ -542,7 +545,7 @@
                 const qty = obj.hasQuantity ? (document.getElementById(`qty-${uid}`)?.value || '—') : '—';
                 const noUnitSuffix = !obj.unit || obj.unit === 'எண்.' || obj.unit === 'எண்ணிக்கை';
                 const qtyDisplay = obj.hasQuantity ? (qty !== '—' ? (noUnitSuffix ? qty : `${qty} ${obj.unit}`) : '—') : '—';
-                const note = document.getElementById(`note-${uid}`)?.value || '';
+                const note = obj.hasNote ? (document.getElementById(`note-${uid}`)?.value || '') : '';
                 rows.push({ name: obj.name, qtyDisplay, note });
             });
             return rows;
