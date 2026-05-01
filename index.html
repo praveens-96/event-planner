@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Planner</title>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -48,24 +48,23 @@
         .object-card {
             border: 1px solid #eee;
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
             background: #fafafa;
         }
         .object-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 8px;
         }
         .object-header input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             accent-color: #8b1a1a;
         }
         .object-name {
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             flex: 1;
         }
         .unit-badge {
@@ -73,44 +72,50 @@
             color: #8b5e3c;
             padding: 2px 8px;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
         }
         .object-fields {
             display: none;
-            margin-top: 8px;
-            padding-left: 30px;
+            margin-top: 6px;
+            padding-left: 26px;
         }
-        .object-fields.visible { display: block; }
+        .object-fields.visible { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; }
         .field-row {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             align-items: center;
-            margin-bottom: 8px;
+        }
+        .field-row.note-row {
+            flex: 1;
         }
         .field-row label {
             font-weight: 500;
-            font-size: 0.85rem;
-            min-width: 60px;
+            font-size: 0.8rem;
             margin-bottom: 0;
+            white-space: nowrap;
         }
-        .field-row input {
-            flex: 1;
-            padding: 8px;
+        .qty-input {
+            width: 120px;
+            padding: 6px 8px;
             border: 1.5px solid #ddd;
             border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            text-align: left;
         }
-        .field-row input:focus { border-color: #8b1a1a; outline: none; }
+        .qty-input:focus { border-color: #8b1a1a; outline: none; }
         .note-input {
-            width: 100%;
-            padding: 8px;
+            flex: 1;
+            min-width: 60px;
+            padding: 6px 8px;
             border: 1.5px solid #ddd;
             border-radius: 6px;
-            font-size: 0.9rem;
-            margin-top: 4px;
+            font-size: 0.85rem;
         }
-        .note-input:focus { border-color: #8b1a1a; outline: none; }
+        .note-input:focus { 
+            border-color: #8b1a1a; 
+            outline: none; 
+        }
         .btn {
             width: 100%;
             padding: 14px;
@@ -126,51 +131,108 @@
         .btn:active { background: #6b1414; }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
         .no-items { color: #999; text-align: center; padding: 20px; font-style: italic; }
+        #pdf-content {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 700px;
+            padding: 30px 40px;
+            background: #fff;
+            font-family: 'Noto Sans Tamil', sans-serif;
+        }
+        #pdf-content .pdf-symbol {
+            text-align: center;
+            font-size: 28px;
+            color: #8b1a1a;
+            margin-bottom: 4px;
+        }
+        #pdf-content .pdf-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #8b1a1a;
+            margin-bottom: 4px;
+        }
+        #pdf-content .pdf-date {
+            text-align: right;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        #pdf-content table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        #pdf-content th {
+            background: #8b1a1a;
+            color: #fff;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        #pdf-content td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #pdf-content tr:nth-child(even) td { background: #faf7f4; }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>🪔 Event Planner</h1>
 
     <div class="section">
-        <label for="event-select">Select Event</label>
+        <label for="event-select">விழா தேர்வு செய்க</label>
         <select id="event-select">
-            <option value="">— Choose an event —</option>
-            <option value="wedding">Wedding</option>
-            <option value="engagement">Engagement</option>
+            <option value="">— விழா —</option>
+            <option value="wedding">திருமணம்</option>
+            <option value="engagement">நிச்சயதார்த்தம்</option>
         </select>
     </div>
 
     <div class="section" id="objects-section" style="display:none;">
-        <label>Items Required</label>
+        <label>தேவையான பூஜை பொருட்கள்</label>
         <div id="objects-list"></div>
     </div>
 
     <button class="btn" id="generate-btn" style="display:none;" onclick="generatePDF()">
-        📄 Generate PDF
+        📄 PDFஆக தரவு செய்க 
     </button>
+
+    <div id="pdf-content">
+        <div class="pdf-date" id="pdf-date"></div>
+        <div class="pdf-symbol">௳</div>
+        <div class="pdf-title" id="pdf-title"></div>
+        <table>
+            <thead>
+                <tr><th>#</th><th>பொருள்</th><th>அளவு</th><th>குறிப்பு</th></tr>
+            </thead>
+            <tbody id="pdf-table-body"></tbody>
+        </table>
+    </div>
 
 
 
     <script>
         const DATA = {
             wedding: {
-                name: "Wedding",
+                name: "திருமணம்",
                 objects: [
-                    { id: "manjal", name: "Manjal", unit: "grams", hasQuantity: true },
-                    { id: "kumkum", name: "Kumkum", unit: "grams", hasQuantity: true },
-                    { id: "coconut", name: "Coconut", unit: "count", hasQuantity: true },
-                    { id: "panneer", name: "Panneer", unit: "ml", hasQuantity: true },
-                    { id: "banana", name: "Banana", unit: "count", hasQuantity: true }
+                    { id: "manjal", name: "மஞ்சள்", unit: "கி.", hasQuantity: true },
+                    { id: "kumkum", name: "குங்குமம்", unit: "கி.", hasQuantity: true },
+                    { id: "coconut", name: "தேங்காய்", unit: "எண்ணிக்கை", hasQuantity: true },
+                    { id: "panneer", name: "பன்னீர்", unit: "மில்லி. ", hasQuantity: true },
+                    { id: "banana", name: "வாழைப்பழம்", unit: "எண்ணிக்கை", hasQuantity: true }
                 ]
             },
             engagement: {
-                name: "Engagement",
+                name: "நிச்சயதார்த்தம்",
                 objects: [
-                    { id: "manjal", name: "Manjal", unit: "grams", hasQuantity: true },
-                    { id: "kumkum", name: "Kumkum", unit: "grams", hasQuantity: true },
-                    { id: "coconut", name: "Coconut", unit: "count", hasQuantity: true },
-                    { id: "vasippu", name: "Vasippu Pathirikai", unit: "—", hasQuantity: false,
-                      defaultNote: "To read the pathirikkai from bride and bridegroom side" }
+                    { id: "manjal", name: "மஞ்சள்", unit: "கி.", hasQuantity: true },
+                    { id: "kumkum", name: "குங்குமம்", unit: "கி.", hasQuantity: true },
+                    { id: "coconut", name: "தேங்காய்", unit: "எண்ணிக்கை", hasQuantity: true },
+                    { id: "vasippu", name: "வாசிப்பு பதிரிக்கை", unit: "—", hasQuantity: false,
+                      defaultNote: "மணமக்கள் மற்றும் மணமகளின் குடும்பத்தாரிடமிருந்து பதிரிக்கை வாசிக்க" }
                 ]
             }
         };
@@ -205,13 +267,13 @@
                     <div class="object-fields visible" id="fields-${obj.id}">
                         ${obj.hasQuantity ? `
                         <div class="field-row">
-                            <label>Qty:</label>
-                            <input type="number" id="qty-${obj.id}" placeholder="Enter ${obj.unit}" min="0" step="any">
+                            <label>அளவு:</label>
+                            <input type="number" class="qty-input" id="qty-${obj.id}" placeholder="${obj.unit}" min="0" step="any">
                         </div>` : ''}
-                        <div class="field-row" style="flex-direction:column; align-items:stretch;">
-                            <label>Note:</label>
+                        <div class="field-row note-row">
+                            <label>குறிப்பு:</label>
                             <input type="text" class="note-input" id="note-${obj.id}" 
-                                   placeholder="Add a note..." 
+                                   placeholder="குறிப்பு சேர்க்கவும்..."
                                    value="${obj.defaultNote || ''}">
                         </div>
                     </div>
@@ -234,51 +296,68 @@
             if (!eventKey) return;
 
             const event = DATA[eventKey];
-            const rows = [];
+            const pdfBody = document.getElementById('pdf-table-body');
+            const pdfTitle = document.getElementById('pdf-title');
+            const pdfDate = document.getElementById('pdf-date');
+
+            pdfTitle.textContent = `${event.name} — பூஜை பொருட்கள்`;
+            pdfDate.textContent = new Date().toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            });
+
+            pdfBody.innerHTML = '';
+            let count = 0;
 
             event.objects.forEach(obj => {
                 const checkbox = document.getElementById(`chk-${obj.id}`);
                 if (!checkbox || !checkbox.checked) return;
 
+                count++;
                 const qty = obj.hasQuantity
                     ? (document.getElementById(`qty-${obj.id}`)?.value || '—')
                     : '—';
+                const qtyDisplay = obj.hasQuantity ? (qty !== '—' ? `${qty} ${obj.unit}` : '—') : '—';
                 const note = document.getElementById(`note-${obj.id}`)?.value || '';
 
-                rows.push([rows.length + 1, obj.name, qty, obj.unit, note]);
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${count}</td><td>${obj.name}</td><td>${qtyDisplay}</td><td>${note}</td>`;
+                pdfBody.appendChild(row);
             });
 
-            if (rows.length === 0) {
+            if (count === 0) {
                 alert('Please select at least one item.');
                 return;
             }
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            generateBtn.disabled = true;
+            generateBtn.textContent = '⏳ Generating...';
 
-            // Title
-            doc.setFontSize(18);
-            doc.setTextColor(139, 26, 26);
-            doc.text(`${event.name} \u2014 Items List`, 14, 20);
+            const element = document.getElementById('pdf-content');
+            element.style.left = '0';
+            element.style.position = 'fixed';
+            element.style.zIndex = '-1';
 
-            // Date
-            doc.setFontSize(10);
-            doc.setTextColor(136, 136, 136);
-            doc.text(`Generated on: ${new Date().toLocaleDateString('en-IN', {
-                day: 'numeric', month: 'long', year: 'numeric'
-            })}`, 14, 28);
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const margin = 10;
+                const imgWidth = pageWidth - margin * 2;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            // Table
-            doc.autoTable({
-                startY: 34,
-                head: [['#', 'Item', 'Quantity', 'Unit', 'Note']],
-                body: rows,
-                headStyles: { fillColor: [139, 26, 26] },
-                alternateRowStyles: { fillColor: [250, 247, 244] },
-                styles: { fontSize: 10 }
+                doc.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgWidth, Math.min(imgHeight, pageHeight - margin * 2));
+                doc.save(`${event.name}-items-list.pdf`);
+            }).catch(err => {
+                alert('PDF generation failed.');
+                console.error(err);
+            }).finally(() => {
+                element.style.left = '-9999px';
+                element.style.position = 'absolute';
+                element.style.zIndex = '';
+                generateBtn.disabled = false;
+                generateBtn.textContent = '📄 PDFஆக தரவு செய்க';
             });
-
-            doc.save(`${event.name.toLowerCase()}-items-list.pdf`);
         }
     </script>
 </body>
